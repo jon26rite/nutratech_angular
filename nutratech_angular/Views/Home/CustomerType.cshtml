@@ -1,0 +1,109 @@
+﻿<style>
+    #mydiv {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        background-color: grey;
+        opacity: .8;
+    }
+
+    .ajax-loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -32px; /* -1 * image width / 2 */
+        margin-top: -32px; /* -1 * image height / 2 */
+        display: block;
+    }
+</style>
+
+<h4>Customer Type</h4>
+<hr />
+<div>
+    <div data-ng-controller="customertypeController" class="container">
+        <div class="row xrow">
+            <div class="col-lg-12">
+                <div class="btn-toolbar my-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-sm" data-ng-hide="addMode">
+                        <a data-ng-click="toggleAdd()" href="javascript:;" class="btn btn-primary">Add New</a>
+                    </div>
+                    <div><strong class="error">{{ error }}</strong></div>
+                    <div class="pull-right" style="max-width:250px; min-width:100px;">
+                        <div id="xsearch_mf" class="input-group input-group-sm">
+                            <span class="input-group-addon"><span class="fa fa-search fa-fw"></span></span>
+                            <input type="text" id="txtsearch" class="form-control" placeholder="Search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row xrow">
+           
+                
+                <form name="addCustomerType" data-ng-show="addMode">
+                    <div class="col-md-6">
+                        <div class="row xrow">
+                            <div class="input-group input-group-sm">
+                                <span for="cid" class="input-group-addon span-addon" style="color:#286090;text-align: left;">ID : </span>
+                                <input type="text" class="form-control input-sm" id="cid" data-ng-model="newcustomertype.Id" required />
+                            </div>
+                        </div>
+
+                        <div class="row xrow">
+                            <div class="input-group input-group-sm">
+                                <span for="cdescription" class="input-group-addon span-addon" style="color:#286090;text-align: left;">Description : </span>
+                                <input type="text" class="form-control input-sm" id="cdescription" placeholder="please enter your name" data-ng-model="newcustomertype.Description" required />
+                            </div>
+                        </div>
+
+                        <div class="row xrow">
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <input type="submit" value="Add" data-ng-click="add()" data-ng-disabled="!addCustomerType.$valid" class="btn btn-primary btn-sm" />
+                                    <input type="button" value="Cancel" data-ng-click="toggleAdd()" class="btn btn-primary  btn-sm" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+           
+        </div>
+       
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" style="background-color:#fff">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Description</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="customertype in customertypes">
+                                <td><strong data-ng-hide="customertype.editMode">{{ customertype.Id }}</strong></td>
+                                <td>
+                                    <p data-ng-hide="customertype.editMode">{{ customertype.Description }}</p>
+                                    <input class="form-control input-sm" data-ng-show="customertype.editMode" type="text" data-ng-model="customertype.Description" />
+                                </td>
+                                <td>
+                                    <p data-ng-hide="customertype.editMode"><a data-ng-click="toggleEdit(customertype)" href="javascript:;">Edit</a> | <a data-ng-click="deletecustomertype(customertype)" href="javascript:;">Delete</a></p>
+                                    <p data-ng-show="customertype.editMode"><a data-ng-click="save(customertype)" href="javascript:;">Save</a> | <a data-ng-click="toggleEdit(customertype)" href="javascript:;">Cancel</a></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="mydiv" data-ng-show="loading">
+            <img src="Images/ajax-loader.gif" class="ajax-loader" />
+        </div>
+    </div>
+
+</div>
