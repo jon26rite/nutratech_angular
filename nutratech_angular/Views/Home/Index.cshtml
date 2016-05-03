@@ -17,10 +17,19 @@
         <link href="~/css/bootstrap-theme.min.css" rel="stylesheet" />
         <link href="~/css/app/style.css" rel="stylesheet" />
 
-        
+        @*Datepicker*@
+        @*<link href="~/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/datepicker/css/ngDatepicker.css" rel="stylesheet" />
+        <script src="~/datepicker/js/ngDatepicker.min.js"></script>
+        <script src="~/datepicker/moment-with-locales.js"></script>*@
+        <link href="~/jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet" />
+        <script src="~/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+
         <script src="~/scripts/Controller/LandingPageController.js"></script>
         <script src="~/scripts/Controller/customertypeController.js"></script>
         <script src="~/scripts/Controller/SupplierController.js"></script>
+        <script src="~/scripts/Controller/JournalController.js"></script>
+        <script src="~/scripts/Controller/AccountController.js"></script>
         <script src="~/scripts/app/app.js"></script>
         
 
@@ -29,7 +38,8 @@
     <body ng-app="myapp">
 
         <div ng-init="user={authenticated:@Model.Authenticated,UserName:'@Model.UserName'}">
-
+            @Model.Authenticated
+            @Model.UserName
             <nav class="navbar navbar-default navbar-inverse" role="navigation" ng-controller="SignInCtrl">
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
@@ -65,20 +75,25 @@
                                     <li>
                                         <a href="/#/CustomerType">Customer Type</a>
                                     </li>
-                                    
-                                    
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="/#/Journals">Journal</a>
+                                    </li>
+                                    <li>
+                                        <a href="/#/Accounts">Account</a>
+                                    </li>
                                 </ul>
                             </li>
-                            
+
                             @*<li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                            <li>@Html.ActionLink("CustomerType", "CustomerType", "Home", new { area = "" }, null)</li>
-                            <li>@Html.ActionLink("Orders", "Index", "Orders", new { area = "" }, null)</li>
-                            <li>@Html.ActionLink("Products", "Index", "Products", new { area = "" }, null)</li>
-                            <li>@Html.ActionLink("Customer", "Index", "Customer", new { area = "" }, null)</li>
-                            <li>@Html.ActionLink("Supplier", "Index", "Supplier", new { area = "" }, null)</li>
-                            <li>@Html.ActionLink("Setting", "Index", "Setting", new { area = "" }, null)</li>
-                            <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>*@
-                        </ul>
+            <li>@Html.ActionLink("CustomerType", "CustomerType", "Home", new { area = "" }, null)</li>
+            <li>@Html.ActionLink("Orders", "Index", "Orders", new { area = "" }, null)</li>
+            <li>@Html.ActionLink("Products", "Index", "Products", new { area = "" }, null)</li>
+            <li>@Html.ActionLink("Customer", "Index", "Customer", new { area = "" }, null)</li>
+            <li>@Html.ActionLink("Supplier", "Index", "Supplier", new { area = "" }, null)</li>
+            <li>@Html.ActionLink("Setting", "Index", "Setting", new { area = "" }, null)</li>
+            <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>*@
+                        </ul> 
 
 
                         <ul class="nav navbar-nav navbar-right" ng-show="!user.authenticated">

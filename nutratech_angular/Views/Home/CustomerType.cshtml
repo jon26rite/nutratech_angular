@@ -34,7 +34,8 @@
                     <div class="pull-right" style="max-width:250px; min-width:100px;">
                         <div id="xsearch_mf" class="input-group input-group-sm">
                             <span class="input-group-addon"><span class="fa fa-search fa-fw"></span></span>
-                            <input type="text" id="txtsearch" class="form-control" placeholder="Search" />
+                            <input type="text" id="txtsearch" data-ng-model="TextSearch" ng-keyup="myFunct($event, TextSearch )" class="form-control" placeholder="Search" />
+                            {{TextSearch}}
                         </div>
                     </div>
                 </div>
@@ -52,7 +53,7 @@
                                 <input type="text" class="form-control input-sm" id="cid" data-ng-model="newcustomertype.Id" required />
                             </div>
                         </div>
-
+                       
                         <div class="row xrow">
                             <div class="input-group input-group-sm">
                                 <span for="cdescription" class="input-group-addon span-addon" style="color:#286090;text-align: left;">Description : </span>

@@ -3,14 +3,30 @@
     var app = angular.module("myapp", ["ngAnimate", "ngRoute", "ngResource"]);
     //service
     app.factory('DataPost', function ($http, $q) {
-
         return {
-
             get: function (url, json) {
                 var mydeffered = $q.defer();
                 $http.post(url, json)
                 .success(mydeffered.resolve).error(mydeffered.reject);
                 return mydeffered.promise;
+            }
+        }
+    });
+
+    app.directive('datepicker', function () {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function (scope, element, attrs, ngModelCtrl) {
+                $(function () {
+                    element.datepicker({
+                        dateFormat: 'mm/dd/yy',
+                        onSelect: function (date) {
+                            ngModelCtrl.$setViewValue(date);
+                            scope.$apply();
+                        }
+                    });
+                });
             }
         }
     });
@@ -22,7 +38,7 @@
         /// Privates
         var _signIn = function (user) {
             DataPost.get("/vm/SignIn", user).then(function (data) {
-                console.log(data);
+                console.log(JSON.stringify(data));
                 user.authenticated = true;
                 $rootScope.user = user;
                 $scope.CurrentUser = user.UserName;
@@ -50,7 +66,7 @@
                 console.log("Unauthorized access");
                 $scope.responseError = true;
             });
-
+ 
         }
 
         // $scope
@@ -78,14 +94,16 @@
     //Customer Type Settings
     app.controller('customertypeController', customertypeController);
     app.controller('SupplierController', SupplierController);
+    app.controller('JournalController', JournalController);
+    app.controller('AccountsController', AccountController);
 
     app.config(['$routeProvider',
      function ($routeProvider) {
          $routeProvider
              .when('/CustomerType', {
-                   templateUrl: 'Home/CustomerType',
-                   controller: 'customertypeController'
-               })
+                 templateUrl: 'Home/CustomerType',
+                 controller: 'customertypeController'
+             })
              .when('/Suppliers', {
                  templateUrl: 'Home/Suppliers',
                  controller: 'supplierController'
@@ -93,8 +111,16 @@
              when('/Customers', {
                  templateUrl: 'Home/Customers',
                  controller: 'customerController'
+             }).
+             when('/Journals', {
+                 templateUrl: 'Home/Journals',
+                 controller: 'JournalController'
+             }).
+             when('/Accounts', {
+                 templateUrl: 'Home/Accounts',
+                 controller: 'AccountsController'
              })
-         .otherwise({ redirectTo: '/' });
+            .otherwise({ redirectTo: '/' });
      }
     ]);
 

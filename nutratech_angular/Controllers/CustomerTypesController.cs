@@ -17,6 +17,23 @@ namespace vikaro_angular.Controllers
     {
         private VikaroContext db = new VikaroContext();
 
+
+        // GET: api/CustomerTypes/SearchKey
+        [Route("api/CustomerTypes/SearchKey/{SearchKey}")]        
+        [HttpGet]
+        public IQueryable<CustomerType> FindCustomerTypes(String SearchKey)
+        {
+            IQueryable<CustomerType> result = null;
+            if (String.IsNullOrEmpty(SearchKey)) {
+                return result;
+            }
+            result =  from c in db.CustomerTypes
+                       where c.Description.ToUpper().Contains(SearchKey.ToUpper())
+                       select c;
+            
+            return result;
+        }
+
         // GET: api/CustomerTypes
         public IQueryable<CustomerType> GetCustomerTypes()
         {
@@ -25,7 +42,7 @@ namespace vikaro_angular.Controllers
 
         // GET: api/CustomerTypes/5
         [ResponseType(typeof(CustomerType))]
-        public async Task<IHttpActionResult> GetCustomerType(int id)
+        public async Task<IHttpActionResult> GetCustomerType(int? id)
         {
             CustomerType customerType = await db.CustomerTypes.FindAsync(id);
             if (customerType == null)

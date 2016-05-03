@@ -42,5 +42,15 @@ namespace vikaro_angular.Controllers
             return View();
         }
 
+        public ActionResult Journals()
+        {
+            return View();
+        }
+
+        public ActionResult Accounts()
+        {
+            return View();
+        }
+
     }
 }

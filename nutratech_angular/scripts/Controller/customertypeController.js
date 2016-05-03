@@ -5,6 +5,35 @@ var customertypeController = function ($scope, $http) {
     $scope.loading = true;
     $scope.addMode = false;
 
+    $scope.TextSearch;
+    
+    $scope.myFunct = function (keyEvent, TextSearch) {
+        var text = " ";
+        if (TextSearch) {
+
+            console.log("the value of search bar is : " + TextSearch);
+            $http.get('/api/CustomerTypes/SearchKey/' + TextSearch).success(function (data) {
+                console.log(" the data is : " + JSON.stringify(data));
+                $scope.customertypes = data;
+                $scope.loading = false;
+            }).error(function (error, status) {
+                console.log("ang error : " + JSON.stringify(error) + " : " + status);
+                $scope.error = "An Error has occured while loading posts!";
+                $scope.loading = false;
+            });
+        }
+        else {
+            console.log("walang laman ang SearchField.");
+            $http.get('/api/CustomerTypes/').success(function (data) {
+                $scope.customertypes = data;
+                $scope.loading = false;
+            })
+   .error(function () {
+       $scope.error = "An Error has occured while loading posts!";
+       $scope.loading = false;
+   });
+        }
+    }
     //get all customer information
     $http.get('/api/CustomerTypes/').success(function (data) {
         $scope.customertypes = data;
@@ -15,6 +44,9 @@ var customertypeController = function ($scope, $http) {
         $scope.loading = false;
     });
 
+   
+    
+    
     //by pressing toggleEdit button ng-click in html, this method will be hit
     $scope.toggleEdit = function () {
         this.customertype.editMode = !this.customertype.editMode;

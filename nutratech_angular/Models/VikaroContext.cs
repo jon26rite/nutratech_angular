@@ -17,6 +17,7 @@ namespace vikaro_angular.Models
     
         public VikaroContext() : base("name=VikaroContext")
         {
+            Database.SetInitializer<VikaroContext>(null);
         }
 
         public System.Data.Entity.DbSet<vikaro_angular.Models.Users> Users { get; set; }
@@ -24,6 +25,9 @@ namespace vikaro_angular.Models
         public System.Data.Entity.DbSet<vikaro_angular.Models.CustomerType> CustomerTypes { get; set; }
 
         public System.Data.Entity.DbSet<vikaro_angular.Models.Business> Businesses { get; set; }
+
+        public DbSet<Journal> Journals { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
     }
 }
