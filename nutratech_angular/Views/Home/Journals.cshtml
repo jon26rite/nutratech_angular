@@ -1,0 +1,162 @@
+﻿
+<style>
+    #mydiv {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        background-color: grey;
+        opacity: .8;
+    }
+
+    .ajax-loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -32px; /* -1 * image width / 2 */
+        margin-top: -32px; /* -1 * image height / 2 */
+        display: block;
+    }
+</style>
+
+<h4>Journals</h4>
+<hr />
+<div>
+    <div data-ng-controller="JournalController" class="container">
+        <div class="row xrow">
+            <div class="col-lg-12">
+                <div class="btn-toolbar my-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-sm" data-ng-hide="addMode">
+                        <a data-ng-click="toggleAdd()" href="javascript:;" class="btn btn-primary">Add New</a>
+                    </div>
+                    <div><strong class="error">{{ error }}</strong></div>
+                    <div class="pull-right" style="max-width:250px; min-width:100px;">
+                        <div id="xsearch_mf" class="input-group input-group-sm">
+                            <span class="input-group-addon"><span class="fa fa-search fa-fw"></span></span>
+                            <input type="text" id="txtsearch" data-ng-model="TextSearch" ng-keyup="myFunct($event, TextSearch )" class="form-control" placeholder="Search" />
+                            {{TextSearch}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row xrow">
+
+
+            <form name="addJournal" data-ng-show="addMode">
+                <div class="col-md-6">                    
+
+                    <div class="row xrow">
+                        <div class="input-group input-group-sm">
+                            <span for="cdescription" class="input-group-addon span-addon" style="color:#286090;text-align: left;">Date : </span>
+                            <input type="text" class="form-control input-sm" id="cdescription" placeholder="Transaction Date" data-ng-model="newjournal.TransactionDate" required datepicker />
+                            @*<ng-datepicker class="form-control input-sm"  ng-model="newjournal.TransactionDate" locale="sl" format="DD MM YYYY" view-format="Do MMMM YYYY">
+                            </ng-datepicker>*@
+                        </div>
+                    </div>
+
+                    <div class="row xrow">
+                        <div class="input-group input-group-sm">
+                            <span for="cdescription" class="input-group-addon span-addon" style="color:#286090;text-align: left;">Description : </span>
+                            <input type="text" class="form-control input-sm" id="description" placeholder="Enter Description" data-ng-model="newjournal.Description" required />
+                        </div>
+                    </div>
+
+                    <div class="row xrow">
+                        <div class="input-group input-group-sm">
+                            <span for="cdescription" class="input-group-addon span-addon" style="color:#286090;text-align: left;">Amount : </span>
+                            <input type="text" class="form-control input-sm" id="amount" placeholder="Enter Amount" data-ng-model="newjournal.Amount" required />
+                        </div>
+                    </div>
+
+                    <div class="row xrow">
+                        <div class="input-group input-group-sm">
+                            <span for="cdescription" class="input-group-addon span-addon" style="color:#286090;text-align: left;">Debit/Credit : </span>
+                            <select class="form-control input-sm" ng-init="newjournal.DebitCreditMode = newjournal.DebitCreditMode || DebitCreditMode[0]" ng-model="newjournal.DebitCreditMode" ng-options="item.id as item.name for item in DebitCreditMode"></select>
+                            @*<pre>{{selectedItem | json}}</pre>*@
+                        </div>
+                    </div>                   
+
+                    <div class="row xrow">
+                        <div class="input-group input-group-sm">
+                            <span for="cdescription" class="input-group-addon span-addon" style="color:#286090;text-align: left;">Account : </span>
+                            @*<input type="text" class="form-control input-sm" id="cdescription" placeholder="Select Account" data-ng-model="newjournal.AccountId" required />*@
+                            <select class="form-control input-sm" ng-model="newjournal.Account" ng-options="account as account.Name for account in accounts">
+                                <option value="" ng-hide="newjournal.Account">==Select an Account==</option>
+
+                            </select>
+
+                        
+                        </div>
+                    </div>
+
+                    <div class="row xrow">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input type="submit" value="Add" data-ng-click="add()" data-ng-disabled="!addJournal.$valid" class="btn btn-primary btn-sm" />
+                                <input type="button" value="Cancel" data-ng-click="toggleAdd()" class="btn btn-primary  btn-sm" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="row xrow xrow">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" style="background-color:#fff">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Account</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="journal in journals">
+                                <td><strong data-ng-hide="journal.editMode">{{ journal.Id }}</strong></td>
+                                <td>
+                                    <p data-ng-hide="journal.editMode">{{ journal.TransactionDate | date:'MMM dd, yyyy' }}</p>
+                                    <input class="form-control input-sm" data-ng-show="journal.editMode" type="text" data-ng-model="journal.TransactionDate" />
+                                </td>
+                                <td>
+                                    <p data-ng-hide="journal.editMode">{{ journal.Description }}</p>
+                                    <input class="form-control input-sm" data-ng-show="journal.editMode" type="text" data-ng-model="journal.Description" />
+                                </td>
+                                <td>
+                                    <p data-ng-hide="journal.editMode">{{ journal.Account.Name }}</p>
+                                    <input class="form-control input-sm" data-ng-show="journal.editMode" type="text" data-ng-model="journal.Account.Name" />
+                                </td>
+                                <td>
+                                    <p data-ng-hide="journal.DebitCreditMode == 'Credit' || journal.editMode == true">{{ journal.Amount }}</p>
+                                    <input class="form-control input-sm" data-ng-show="journal.editMode == true && journal.DebitCreditMode == 'Debit' " type="text" data-ng-model="journal.Amount" />
+                                </td>
+                                <td>
+                                    <p data-ng-hide="journal.DebitCreditMode == 'Debit' || journal.editMode == true">{{ journal.Amount }}</p>
+                                    <input class="form-control input-sm" data-ng-show="journal.editMode == true && journal.DebitCreditMode == 'Credit' " type="text" data-ng-model="journal.Amount" />
+                                </td>
+                                <td>
+                                    <p data-ng-hide="journal.editMode"><a data-ng-click="toggleEdit(journal)" href="javascript:;">Edit</a> | <a data-ng-click="deletejournal(journal)" href="javascript:;">Delete</a></p>
+                                    <p data-ng-show="journal.editMode"><a data-ng-click="save(journal)" href="javascript:;">Save</a> | <a data-ng-click="toggleEdit(journal)" href="javascript:;">Cancel</a></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="mydiv" data-ng-show="loading">
+            <img src="Images/ajax-loader.gif" class="ajax-loader" />
+        </div>
+    </div>
+
+</div>
